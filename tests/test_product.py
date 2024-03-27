@@ -29,3 +29,25 @@ def test_make(get_book_category_without_products, get_book_category_with_product
     assert p.description == "Книга о путешествии А.П. Чехова на остров Сахалин"
     assert p.price == 450.5
     assert p.count == 6
+
+
+def test_price(monkeypatch):
+    p = Product.make("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3)
+    assert p.price == 450.5
+
+    p.price = -1
+    assert p.price == 450.5
+
+    p.price = 500
+    assert p.price == 500
+
+    monkeypatch.setattr('builtins.input', lambda _: "y")
+    p.price = 400
+    assert p.price == 400
+
+    monkeypatch.setattr('builtins.input', lambda _: "n")
+    p.price = 300
+    assert p.price == 400
+
+    del p.price
+    assert p.price == 0

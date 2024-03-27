@@ -2,8 +2,30 @@ class Product:
     def __init__(self, name: str, description: str, price: float, count: int):
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.count = count
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, new_price):
+        if new_price <= 0:
+            print("НОВАЯ цена некорректна <= 0!!!")
+            return
+        elif new_price < self.__price:
+            while ((confirm_change := input("Новая цена меньше текущей! Подтвердите изменение (y/n)!").lower())
+                   not in ("y", "n")):
+                pass
+            if confirm_change == "y":
+                self.__price = new_price
+        else:
+            self.__price = new_price
+
+    @price.deleter
+    def price(self):
+        self.__price = 0
 
     @classmethod
     def make(cls, name: str, description: str, price: float, count: int, category=None):
