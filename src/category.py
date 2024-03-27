@@ -20,10 +20,36 @@ class Category:
         # но пока так
         Category.products_unique_count += len(self.__products)
 
-    def add_product(self, product: Product):
-        self.__products.append(product)
-        Category.products_unique_count += 1
-
     @property
     def products(self):
         return "\n".join([f"{p.name}, {p.price} руб. Остаток: {p.count} шт." for p in self.__products])
+
+    def add_product(self, product: Product):
+        """
+        Добавляет новый продукт в категорию
+        :param product: добавляемый продукт
+        :return: None
+        """
+        self.__products.append(product)
+        Category.products_unique_count += 1
+
+    def get_product_properties(self, name: str):
+        """
+        Возвращает цену и количество продукта. Если такого продукта нет, то (0, 0)
+        :param name: наименование продукта
+        :return: цена и количество продукта
+        """
+        for p in self.__products:
+            if p.name.lower() == name.lower():
+                return p.price, p.count
+        return 0, 0
+
+    @classmethod
+    def reset_global_counters(cls):
+        """
+        Сброс счетчиков количества экземпляров категорий и количества экземпляров продуктов
+        НЕОБХОДИМО для предсказуемой проверки тестов
+        :return: None
+        """
+        cls.categories_count = 0
+        cls.products_unique_count = 0

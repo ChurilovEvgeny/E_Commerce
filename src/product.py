@@ -4,3 +4,23 @@ class Product:
         self.description = description
         self.price = price
         self.count = count
+
+    @classmethod
+    def make(cls, name: str, description: str, price: float, count: int, category=None):
+        """
+        Метод фабрика для создания объекта Product.
+        Если задан category, то в нем выполняется поиск объекта с таким-же именем.
+        Если объект не найден, то создается новый объект Product исходя из параметров.
+        Если объект найден, то выбирается максимальная цена, а количество складывается
+        :param name: наименование продукта
+        :param description: описание продукта
+        :param price: цена продукта
+        :param count: количество продукта
+        :param category: объект Category, который в себе уже может содержать Product с именем name
+        :return: новый объект Product
+        """
+        if category is None:
+            return cls(name, description, price, count)
+        else:
+            price_cat, count_cat = category.get_product_properties(name)
+            return cls(name, description, max(price, price_cat), count + count_cat)

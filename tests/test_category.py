@@ -1,29 +1,8 @@
-import pytest
-
-from src.product import Product
-
 from src.category import Category
 
 
-@pytest.fixture
-def get_books():
-    return [Product("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3),
-            Product("Кошко. Уголовный мир царской России", "Мемуары", 120.0, 10),
-            Product("Тургенев. Отцы и дети", "Роман", 100.0, 25)]
-
-
-@pytest.fixture
-def get_medicines():
-    return [Product("Аспирин", "От всего", 20, 300),
-            Product("Ибупрофен", "От боли", 40, 150), ]
-
-
-@pytest.fixture
-def get_additional_medicines():
-    return Product("Спирт", "Для всего", 99, 400)
-
-
 def test_category_init(get_books, get_medicines):
+    Category.reset_global_counters()
     assert Category.categories_count == 0
     assert Category.products_unique_count == 0
 
@@ -44,16 +23,33 @@ def test_category_init(get_books, get_medicines):
     assert medicines_category.products == ('Аспирин, 20 руб. Остаток: 300 шт.\n'
                                            'Ибупрофен, 40 руб. Остаток: 150 шт.')
 
+    Category.reset_global_counters()
+    assert Category.categories_count == 0
+    assert Category.products_unique_count == 0
+
 
 def test_add_product(get_medicines, get_additional_medicines):
+    Category.reset_global_counters()
     medicines_category = Category("Медикаменты", "Разные медикаменты", get_medicines)
-    assert Category.categories_count == 3 # НЕ ЗАБЫВАЕМ, что это ГЛОБАЛЬНЫЕ счетчики
-    assert Category.products_unique_count == 7
+    assert Category.categories_count == 1  # НЕ ЗАБЫВАЕМ, что это ГЛОБАЛЬНЫЕ счетчики
+    assert Category.products_unique_count == 2
 
     medicines_category.add_product(get_additional_medicines)
-    assert Category.categories_count == 3
-    assert Category.products_unique_count == 8
+    assert Category.categories_count == 1
+    assert Category.products_unique_count == 3
     assert medicines_category.description == "Разные медикаменты"
     assert medicines_category.products == ('Аспирин, 20 руб. Остаток: 300 шт.\n'
                                            'Ибупрофен, 40 руб. Остаток: 150 шт.\n'
                                            'Спирт, 99 руб. Остаток: 400 шт.')
+
+
+def test_get_products_properties(get_medicines):
+    Category.reset_global_counters()
+    medicines_category = Category("Медикаменты", "Разные медикаменты", get_medicines)
+    price, count = medicines_category.get_product_properties("Аспирин")
+    assert price == 20
+    assert count == 300
+
+    price, count = medicines_category.get_product_properties("НЕТ в категории")
+    assert price == 0
+    assert count == 0
