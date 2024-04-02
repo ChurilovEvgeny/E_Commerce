@@ -28,6 +28,15 @@ def test_category_init(get_books, get_medicines):
     assert Category.products_unique_count == 0
 
 
+def test_dander(get_medicines):
+    Category.reset_global_counters()
+    medicines_category = Category("Медикаменты", "Разные медикаменты", get_medicines)
+
+    assert len(medicines_category) == 450
+    assert str(medicines_category) == "Медикаменты, количество продуктов: 450 шт."
+    Category.reset_global_counters()
+
+
 def test_add_product(get_medicines, get_additional_medicines):
     Category.reset_global_counters()
     medicines_category = Category("Медикаменты", "Разные медикаменты", get_medicines)
