@@ -1,3 +1,9 @@
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from src.category import Category
+
+
 class Product:
     def __init__(self, name: str, description: str, price: float, count: int):
         self.name = name
@@ -5,9 +11,19 @@ class Product:
         self.__price = price
         self.count = count
 
+    def __str__(self):
+        return f"{self.name}, {self.price} руб. Остаток: {self.count} шт."
+
+    def __add__(self, other):
+        return self.total_price + other.total_price
+
     @property
     def price(self):
         return self.__price
+
+    @property
+    def total_price(self):
+        return self.count * self.price
 
     @price.setter
     def price(self, new_price):
@@ -28,7 +44,7 @@ class Product:
         self.__price = 0
 
     @classmethod
-    def make(cls, name: str, description: str, price: float, count: int, category=None):
+    def make(cls, name: str, description: str, price: float, count: int, category: Union["Category", None] = None):
         """
         Метод фабрика для создания объекта Product.
         Если задан category, то в нем выполняется поиск объекта с таким-же именем.

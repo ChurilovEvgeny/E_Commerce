@@ -20,9 +20,18 @@ class Category:
         # но пока так
         Category.products_unique_count += len(self.__products)
 
+    def __str__(self):
+        return f"{self.name}, количество продуктов: {len(self)} шт."
+
+    def __len__(self):
+        return sum([i.count for i in self.__products])
+
+    def __iter__(self):
+        return iter(self.__products)
+
     @property
     def products(self):
-        return "\n".join([f"{p.name}, {p.price} руб. Остаток: {p.count} шт." for p in self.__products])
+        return "\n".join(map(str, self.__products))
 
     def add_product(self, product: Product):
         """
