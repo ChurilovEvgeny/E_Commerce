@@ -9,6 +9,12 @@ def test_product_init():
     assert p.count == 3
 
 
+def test_dander():
+    p1 = Product.make("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3)
+    p2 = Product.make("Достоевский. Бесы", "Роман?", 1000, 2)
+    assert p1 + p2 == 3351.5
+
+
 def test_make(get_book_category_without_products, get_book_category_with_products):
     p = Product.make("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3)
     assert p.name == "Чехов. Остров Сахалин"
@@ -34,6 +40,7 @@ def test_make(get_book_category_without_products, get_book_category_with_product
 def test_price(monkeypatch):
     p = Product.make("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3)
     assert p.price == 450.5
+    assert p.total_price == 1351.5
 
     p.price = -1
     assert p.price == 450.5
