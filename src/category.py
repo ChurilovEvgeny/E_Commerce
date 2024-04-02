@@ -22,7 +22,7 @@ class Category:
 
     @property
     def products(self):
-        return "\n".join([f"{p.name}, {p.price} руб. Остаток: {p.count} шт." for p in self.__products])
+        return "\n".join(map(str, self.__products))
 
     def add_product(self, product: Product):
         """
