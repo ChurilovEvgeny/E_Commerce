@@ -26,6 +26,9 @@ class Category:
     def __len__(self):
         return sum([i.count for i in self.__products])
 
+    def __iter__(self):
+        return iter(self.__products)
+
     @property
     def products(self):
         return "\n".join(map(str, self.__products))
