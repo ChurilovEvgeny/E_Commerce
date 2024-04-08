@@ -39,6 +39,9 @@ class Category:
         :param product: добавляемый продукт
         :return: None
         """
+        if not isinstance(product, Product):
+            raise TypeError("Передаваемый объект обязан быть Product или его наследник")
+
         self.__products.append(product)
         Category.products_unique_count += 1
 
