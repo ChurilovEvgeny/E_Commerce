@@ -1,3 +1,5 @@
+import pytest
+
 from src.category import Category
 
 
@@ -50,6 +52,9 @@ def test_add_product(get_medicines, get_additional_medicines):
     assert medicines_category.products == ('Аспирин, 20 руб. Остаток: 300 шт.\n'
                                            'Ибупрофен, 40 руб. Остаток: 150 шт.\n'
                                            'Спирт, 99 руб. Остаток: 400 шт.')
+
+    with pytest.raises(TypeError):
+        medicines_category.add_product("STRING")
 
 
 def test_get_products_properties(get_medicines):

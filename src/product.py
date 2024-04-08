@@ -15,7 +15,9 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.count} шт."
 
     def __add__(self, other):
-        return self.total_price + other.total_price
+        if type(self) == type(other):
+            return self.total_price + other.total_price
+        raise TypeError("Складывать товары разных типов запрещено!")
 
     @property
     def price(self):
