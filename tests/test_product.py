@@ -1,4 +1,7 @@
+import pytest
+
 from src.product import Product
+from src.smartphone import Smartphone
 
 
 def test_product_init():
@@ -13,6 +16,13 @@ def test_dander():
     p1 = Product.make("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 3)
     p2 = Product.make("Достоевский. Бесы", "Роман?", 1000, 2)
     assert p1 + p2 == 3351.5
+
+    sm1 = Smartphone("T", "T", 100, 1, "1", "1", 50, "B")
+    sm2 = Smartphone("T", "T", 150, 1, "1", "1", 50, "B")
+    assert sm1 + sm2 == 250
+
+    with pytest.raises(TypeError):
+        p1 + sm1
 
 
 def test_make(get_book_category_without_products, get_book_category_with_products):
