@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING, Union
 
+from src.good import Good
+
 if TYPE_CHECKING:
     from src.category import Category
 
 
-class Product:
+class Product(Good):
     def __init__(self, name: str, description: str, price: float, count: int):
         self.name = name
         self.description = description
@@ -15,7 +17,7 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.count} шт."
 
     def __add__(self, other):
-        if type(self) == type(other):
+        if type(self) is type(other):
             return self.total_price + other.total_price
         raise TypeError("Складывать товары разных типов запрещено!")
 
