@@ -11,6 +11,10 @@ class Good(ABC):
     def __str__(self):
         pass
 
+    @abstractmethod
+    def __repr__(self):
+        pass
+
     @property
     @abstractmethod
     def price(self):
