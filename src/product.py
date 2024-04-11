@@ -9,19 +9,17 @@ if TYPE_CHECKING:
 
 class Product(Good, MixinConsoleLog):
     def __init__(self, name: str, description: str, price: float, count: int):
+        super().__init__()
         self.name = name
         self.description = description
         self.__price = price
         self.count = count
 
         if type(self) is Product:
-            MixinConsoleLog.__init__(self)
+            print(MixinConsoleLog.__repr__(self))
 
     def __str__(self):
         return f"{self.name}, {self.price} руб. Остаток: {self.count} шт."
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({", ".join(map(str, self.__dict__.values()))})"
 
     def __add__(self, other):
         if type(self) is type(other):
