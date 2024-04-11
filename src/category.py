@@ -22,13 +22,10 @@ class Category(MixinConsoleLog):
         Category.products_unique_count += len(self.__products)
 
         if type(self) is Category:
-            MixinConsoleLog.__init__(self)
+            print(MixinConsoleLog.__repr__(self))
 
     def __str__(self):
         return f"{self.name}, количество продуктов: {len(self)} шт."
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({", ".join(map(str, self.__dict__.values()))})"
 
     def __len__(self):
         return sum([i.count for i in self.__products])

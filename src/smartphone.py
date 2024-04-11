@@ -12,7 +12,4 @@ class Smartphone(Product, MixinConsoleLog):
         self.color = color
 
         if type(self) is Smartphone:
-            MixinConsoleLog.__init__(self)
-
-    def __repr__(self):
-        return Product.__repr__(self)
+            print(MixinConsoleLog.__repr__(self))
