@@ -9,17 +9,11 @@ class Category(MixinConsoleLog):
     def __init__(self, name: str, description: str, products: list[Product]):
         self.name = name
         self.description = description
-        self.__products = list(
-            products)  # Копия, чтобы не было непредвиденного поведения с доступом по ссылке к исходному списку
+        self.__products = []
+        for pr in products:
+            self.add_product(pr)
 
         Category.categories_count += 1
-
-        # Реализация подсчета количества уникальных продуктов несколько спорная, так как в теории
-        # в одной категории могут быть несколько объектов Product с одинаковыми позициями
-        # или же в разные категории могут попасть одинаковые Product
-        # если такая возможность реальна, то, возможно, название Product надо хранить в set,
-        # но пока так
-        Category.products_unique_count += len(self.__products)
 
         if type(self) is Category:
             print(MixinConsoleLog.__repr__(self))
@@ -45,6 +39,9 @@ class Category(MixinConsoleLog):
         """
         if not isinstance(product, Product):
             raise TypeError("Передаваемый объект обязан быть Product или его наследник")
+
+        if product.count == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
 
         self.__products.append(product)
         Category.products_unique_count += 1

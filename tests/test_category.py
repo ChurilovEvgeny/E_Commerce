@@ -29,6 +29,11 @@ def test_category_init(get_books, get_medicines):
     assert Category.categories_count == 0
     assert Category.products_unique_count == 0
 
+def test_add_product_with_empty_count(get_empty_books):
+    Category.reset_global_counters()
+    with pytest.raises(ValueError):
+        Category("Книги", "Литература", get_empty_books)
+    Category.reset_global_counters()
 
 def test_dander(get_medicines):
     Category.reset_global_counters()
