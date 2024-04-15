@@ -29,11 +29,25 @@ def test_category_init(get_books, get_medicines):
     assert Category.categories_count == 0
     assert Category.products_unique_count == 0
 
+
 def test_add_product_with_empty_count(get_empty_books):
     Category.reset_global_counters()
     with pytest.raises(ValueError):
         Category("Книги", "Литература", get_empty_books)
     Category.reset_global_counters()
+
+
+def test_get_avarage_price(get_books):
+    Category.reset_global_counters()
+
+    books_category = Category("Книги", "Литература", get_books)
+    assert books_category.get_average_price() == 223.5
+
+    empty_category = Category("Книги", "Литература", [])
+    assert empty_category.get_average_price() == 0
+
+    Category.reset_global_counters()
+
 
 def test_dander(get_medicines):
     Category.reset_global_counters()

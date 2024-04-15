@@ -6,6 +6,8 @@ class Category(MixinConsoleLog):
     categories_count = 0
     products_unique_count = 0
 
+    __products : list[Product]
+
     def __init__(self, name: str, description: str, products: list[Product]):
         self.name = name
         self.description = description
@@ -56,6 +58,18 @@ class Category(MixinConsoleLog):
             if p.name.lower() == name.lower():
                 return p.price, p.count
         return 0, 0
+
+    def get_average_price(self) -> float:
+        """
+        Метод подсчитывает и возвращает средний ценник всех товаров
+        :return: средний ценник всех товаров
+        """
+        price_summary = sum((product.price for product in self.__products))
+        try:
+            return price_summary / len(self.__products)
+        except ZeroDivisionError:
+            return 0.0
+
 
     @classmethod
     def reset_global_counters(cls):
