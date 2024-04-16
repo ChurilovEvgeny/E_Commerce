@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING, Union
 
 from src.console_log import MixinConsoleLog
-from src.good import Good
+from src.abs_product import AbsProduct
 
 if TYPE_CHECKING:
     from src.category import Category
 
 
-class Product(Good, MixinConsoleLog):
+class Product(AbsProduct, MixinConsoleLog):
     def __init__(self, name: str, description: str, price: float, count: int):
         super().__init__()
         self.name = name

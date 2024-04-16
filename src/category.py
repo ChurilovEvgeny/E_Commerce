@@ -1,12 +1,13 @@
+from src.abs_product_container import AbsProductContainer
 from src.console_log import MixinConsoleLog
 from src.product import Product
 
 
-class Category(MixinConsoleLog):
+class Category(AbsProductContainer, MixinConsoleLog):
     categories_count = 0
     products_unique_count = 0
 
-    __products : list[Product]
+    __products: list[Product]
 
     def __init__(self, name: str, description: str, products: list[Product]):
         self.name = name
@@ -33,18 +34,7 @@ class Category(MixinConsoleLog):
     def products(self):
         return "\n".join(map(str, self.__products))
 
-    def add_product(self, product: Product):
-        """
-        Добавляет новый продукт в категорию
-        :param product: добавляемый продукт
-        :return: None
-        """
-        if not isinstance(product, Product):
-            raise TypeError("Передаваемый объект обязан быть Product или его наследник")
-
-        if product.count == 0:
-            raise ValueError("Товар с нулевым количеством не может быть добавлен")
-
+    def _add_product_in_object(self, product: Product):
         self.__products.append(product)
         Category.products_unique_count += 1
 
@@ -69,7 +59,6 @@ class Category(MixinConsoleLog):
             return price_summary / len(self.__products)
         except ZeroDivisionError:
             return 0.0
-
 
     @classmethod
     def reset_global_counters(cls):

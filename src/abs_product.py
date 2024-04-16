@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Good(ABC):
+class AbsProduct(ABC):
 
     @abstractmethod
     def __add__(self, other):

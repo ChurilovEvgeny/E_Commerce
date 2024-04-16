@@ -30,13 +30,6 @@ def test_category_init(get_books, get_medicines):
     assert Category.products_unique_count == 0
 
 
-def test_add_product_with_empty_count(get_empty_books):
-    Category.reset_global_counters()
-    with pytest.raises(ValueError):
-        Category("Книги", "Литература", get_empty_books)
-    Category.reset_global_counters()
-
-
 def test_get_avarage_price(get_books):
     Category.reset_global_counters()
 
@@ -58,7 +51,7 @@ def test_dander(get_medicines):
     Category.reset_global_counters()
 
 
-def test_add_product(get_medicines, get_additional_medicines):
+def test_add_product(get_medicines, get_additional_medicines, capfd):
     Category.reset_global_counters()
     medicines_category = Category("Медикаменты", "Разные медикаменты", get_medicines)
     assert Category.categories_count == 1  # НЕ ЗАБЫВАЕМ, что это ГЛОБАЛЬНЫЕ счетчики
@@ -72,8 +65,32 @@ def test_add_product(get_medicines, get_additional_medicines):
                                            'Ибупрофен, 40 руб. Остаток: 150 шт.\n'
                                            'Спирт, 99 руб. Остаток: 400 шт.')
 
+    out, _ = capfd.readouterr()
+    assert out == """Товар успешно добавлен
+Обработка добавления товара завершена
+Товар успешно добавлен
+Обработка добавления товара завершена
+Category(Медикаменты, Разные медикаменты, [Product(Аспирин, От всего, 20, 300), Product(Ибупрофен, От боли, 40, 150)])
+Товар успешно добавлен
+Обработка добавления товара завершена
+"""
+
     with pytest.raises(TypeError):
         medicines_category.add_product("STRING")
+
+
+def test_add_product_with_zero_count(get_empty_books, capfd):
+    Category.reset_global_counters()
+    assert Category.categories_count == 0
+    assert Category.products_unique_count == 0
+
+    Category("Книги", "Литература", get_empty_books)
+    out, _ = capfd.readouterr()
+    assert out == "Товар с нулевым количеством не может быть добавлен\nОбработка добавления товара завершена\nCategory(Книги, Литература, [])\n"
+
+    assert Category.categories_count == 1
+    assert Category.products_unique_count == 0
+    Category.reset_global_counters()
 
 
 def test_get_products_properties(get_medicines):
