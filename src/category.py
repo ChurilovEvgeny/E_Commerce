@@ -1,25 +1,22 @@
+from src.abs_product_container import AbsProductContainer
 from src.console_log import MixinConsoleLog
 from src.product import Product
 
 
-class Category(MixinConsoleLog):
+class Category(AbsProductContainer, MixinConsoleLog):
     categories_count = 0
     products_unique_count = 0
+
+    __products: list[Product]
 
     def __init__(self, name: str, description: str, products: list[Product]):
         self.name = name
         self.description = description
-        self.__products = list(
-            products)  # Копия, чтобы не было непредвиденного поведения с доступом по ссылке к исходному списку
+        self.__products = []
+        for pr in products:
+            self.add_product(pr)
 
         Category.categories_count += 1
-
-        # Реализация подсчета количества уникальных продуктов несколько спорная, так как в теории
-        # в одной категории могут быть несколько объектов Product с одинаковыми позициями
-        # или же в разные категории могут попасть одинаковые Product
-        # если такая возможность реальна, то, возможно, название Product надо хранить в set,
-        # но пока так
-        Category.products_unique_count += len(self.__products)
 
         if type(self) is Category:
             print(MixinConsoleLog.__repr__(self))
@@ -37,15 +34,7 @@ class Category(MixinConsoleLog):
     def products(self):
         return "\n".join(map(str, self.__products))
 
-    def add_product(self, product: Product):
-        """
-        Добавляет новый продукт в категорию
-        :param product: добавляемый продукт
-        :return: None
-        """
-        if not isinstance(product, Product):
-            raise TypeError("Передаваемый объект обязан быть Product или его наследник")
-
+    def _add_product_in_object(self, product: Product):
         self.__products.append(product)
         Category.products_unique_count += 1
 
@@ -59,6 +48,17 @@ class Category(MixinConsoleLog):
             if p.name.lower() == name.lower():
                 return p.price, p.count
         return 0, 0
+
+    def get_average_price(self) -> float:
+        """
+        Метод подсчитывает и возвращает средний ценник всех товаров
+        :return: средний ценник всех товаров
+        """
+        price_summary = sum((product.price for product in self.__products))
+        try:
+            return price_summary / len(self.__products)
+        except ZeroDivisionError:
+            return 0.0
 
     @classmethod
     def reset_global_counters(cls):

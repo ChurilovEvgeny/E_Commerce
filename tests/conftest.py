@@ -10,6 +10,9 @@ def get_books():
             Product("Кошко. Уголовный мир царской России", "Мемуары", 120.0, 10),
             Product("Тургенев. Отцы и дети", "Роман", 100.0, 25)]
 
+@pytest.fixture
+def get_empty_books():
+    return [Product("Чехов. Остров Сахалин", "Книга о путешествии А.П. Чехова на остров Сахалин", 450.5, 0)]
 
 @pytest.fixture
 def get_medicines():
